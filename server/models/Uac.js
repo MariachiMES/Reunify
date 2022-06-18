@@ -33,6 +33,18 @@ const uacSchema = new Mongoose.Schema({
     type: Mongoose.Schema.Types.ObjectId,
     ref: "Sponsor",
   },
+  status: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "Status",
+  },
+  tasks: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "Tasks",
+  },
+  release_request: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "ReleaseRequest",
+  },
 });
 
 const Uac = Mongoose.model("Uac", uacSchema);

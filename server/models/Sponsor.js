@@ -1,4 +1,4 @@
-const Mongoose = required("mongoose");
+const Mongoose = require("mongoose");
 
 const sponsorSchema = new Mongoose.Schema({
   name: {
@@ -24,6 +24,27 @@ const sponsorSchema = new Mongoose.Schema({
   },
   zip: {
     type: String,
+  },
+  adult_caregiver_name: {
+    type: String,
+  },
+  adult_caregiver_phone: {
+    type: String,
+  },
+  category1: {
+    type: Boolean,
+  },
+  category2A: {
+    type: Boolean,
+  },
+  category2B: {
+    type: Boolean,
+  },
+  category3: {
+    type: Boolean,
+  },
+  category4: {
+    type: Boolean,
   },
 });
 
