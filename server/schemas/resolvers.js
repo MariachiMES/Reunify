@@ -25,7 +25,7 @@ const resolvers = {
       return { token, newUser };
     },
 
-    addUac: async (parent, { uacname, _id }) => {
+    addUac: async (parent, { uacname }) => {
       const newUac = await Uac.create({ uacname });
       return newUac;
     },
