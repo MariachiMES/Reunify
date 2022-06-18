@@ -13,8 +13,8 @@ const resolvers = {
     uacs: async () => {
       return await Uac.find().populate("username");
     },
-    uac: async (parent, args) => {
-      return await Uac.findById(args.uacId).populate("username");
+    uac: async (parent, { uacId }) => {
+      return await Uac.findById(uacId).populate("username");
     },
   },
 
