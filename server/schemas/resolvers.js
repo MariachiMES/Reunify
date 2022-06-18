@@ -8,8 +8,8 @@ const resolvers = {
       return await User.find().populate("Uac");
     },
 
-    user: async () => {
-      return await User.findById().populate("Uac");
+    user: async (parent, { userId }) => {
+      return await User.findById(userId).populate("Uac");
     },
     uacs: async () => {
       return await Uac.find().populate("username");
@@ -21,9 +21,9 @@ const resolvers = {
 
   Mutation: {
     addUser: async (parent, { username, email, password }) => {
-      const newUser = await User.create({ username, email, password });
-      const token = signToken(newUser);
-      return { token, newUser };
+      const user = await User.create({ username, email, password });
+      const token = signToken(user);
+      return { user };
     },
 
     addUac: async (parent, { uacname }) => {
