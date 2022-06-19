@@ -6,6 +6,7 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
+    team_lead: [User]
     uacs: [Uac]
   }
 
@@ -32,6 +33,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     removeUser(_id: ID!): User
     removeUac(_id: ID!): Uac
+    assignTeamLead(_id: ID!, id: ID!): User
   }
 `;
 

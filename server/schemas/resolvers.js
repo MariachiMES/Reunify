@@ -27,9 +27,13 @@ const resolvers = {
         password,
       });
       const token = signToken(newUser);
-      console.log(newUser, token);
+      console.log({ newUser, token });
       return token, newUser;
     },
+    //Assign Team Lead
+    // assignTeamLead: async (parent, { userId, teamLeadId }) => {
+    //   return await User.findOneAndUpdate({caseuserId}, teamLeadId);
+    // },
 
     addUac: async (parent, { uacname }) => {
       const newUac = await Uac.create({ uacname });
