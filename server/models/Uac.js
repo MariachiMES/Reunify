@@ -6,6 +6,13 @@ const uacSchema = new Mongoose.Schema({
   },
   a_number: {
     type: Number,
+    validate: {
+      validator: function (v) {
+        return /\d\d\d\d\d\d\d\d\d/.test(v);
+      },
+      message: `Not a valid A Number`,
+    },
+    unique: [true, "UAC already exists"],
   },
   date_of_birth: {
     type: Date,

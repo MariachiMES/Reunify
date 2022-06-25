@@ -5,7 +5,7 @@ const UAC = require("./Uac");
 const userSchema = new Mongoose.Schema({
   is_team_lead: {
     type: Boolean,
-    defaultValue: true,
+    default: false,
   },
   username: {
     type: String,
@@ -29,10 +29,17 @@ const userSchema = new Mongoose.Schema({
       ref: "Uac",
     },
   ],
+
   team_lead: {
     type: Mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  team_members: [
+    {
+      type: Mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 //Hooks

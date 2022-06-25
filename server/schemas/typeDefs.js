@@ -6,13 +6,16 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
-    team_lead: [User]
+    is_team_lead: Boolean
+    team_lead: User
     uacs: [Uac]
   }
 
   type Uac {
     _id: ID
     uacname: String
+    a_number: Int
+    casemanager: User
   }
 
   type Auth {
@@ -29,11 +32,13 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): User
-    addUac(uacname: String!): Uac
+    addUac(uacname: String!, a_number: Int!, casemanager: ID!): Uac
+    assignCM(userId: String!, uacId: String!): User
+    assignTeamLead(cmUserId: ID!, teamLeadId: ID!): User
     login(email: String!, password: String!): Auth
     removeUser(_id: ID!): User
     removeUac(_id: ID!): Uac
-    assignTeamLead(_id: ID!, id: ID!): User
+    updateRole(cmId: ID!, is_team_lead: Boolean!): User
   }
 `;
 

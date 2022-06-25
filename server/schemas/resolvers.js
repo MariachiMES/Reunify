@@ -5,17 +5,36 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     users: async () => {
-      return await User.find().populate("Uac");
+      const allUsers = await User.find().populate([
+        {
+          path: "uacs",
+          model: "Uac",
+        },
+        { path: "team_lead", model: "User" },
+      ]);
+      console.log(allUsers);
+      return allUsers;
     },
 
     user: async (parent, { userId }) => {
-      return await User.findById(userId).populate("Uac");
+      return await User.findById(userId).populate([
+        {
+          path: "uacs",
+          model: "Uac",
+        },
+        { path: "team_lead", model: "User" },
+      ]);
     },
     uacs: async () => {
-      return await Uac.find().populate("username");
+      return await Uac.find().populate({ path: "casemanager", model: "User" });
     },
     uac: async (parent, { uacId }) => {
-      return await Uac.findById(uacId).populate("username");
+      console.log(uacId);
+      const uac = await Uac.findById(uacId).populate({
+        path: "casemanager",
+        model: "User",
+      });
+      return uac;
     },
   },
 
@@ -27,17 +46,32 @@ const resolvers = {
         password,
       });
       const token = signToken(newUser);
-      console.log({ newUser, token });
       return token, newUser;
     },
-    //Assign Team Lead
-    // assignTeamLead: async (parent, { userId, teamLeadId }) => {
-    //   return await User.findOneAndUpdate({caseuserId}, teamLeadId);
-    // },
+    assignTeamLead: async (parent, { cmUserId, teamLeadId }) => {
+      return await User.findOneAndUpdate(cmUserId, { team_lead: teamLeadId });
+    },
 
-    addUac: async (parent, { uacname }) => {
-      const newUac = await Uac.create({ uacname });
-      return newUac;
+    updateRole: async (parent, { is_team_lead, cmId }) => {
+      const updatedTeamLead = await User.findByIdAndUpdate(cmId, {
+        is_team_lead: is_team_lead,
+      });
+      return updatedTeamLead;
+    },
+
+    addUac: async (parent, { uacname, a_number, casemanager }) => {
+      const newUac = await Uac.create({
+        uacname,
+        a_number,
+        casemanager,
+      });
+      return newUac.populate({ path: "casemanager", model: "User" });
+    },
+    assignCM: async (parent, { userId, uacId }) => {
+      const assignedCM = await User.findByIdAndUpdate(userId, {
+        uacs: uacId,
+      });
+      return assignedCM;
     },
     removeUser: async (parent, { userId }) => {
       return User.findOneAndDelete(args, { _id: userId });
