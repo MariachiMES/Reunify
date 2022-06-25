@@ -49,7 +49,7 @@ const resolvers = {
       return token, newUser;
     },
     assignTeamLead: async (parent, { cmUserId, teamLeadId }) => {
-      return await User.findOneAndUpdate(cmUserId, { team_lead: teamLeadId });
+      return await User.findByIdAndUpdate(cmUserId, { team_lead: teamLeadId });
     },
 
     updateRole: async (parent, { is_team_lead, cmId }) => {
