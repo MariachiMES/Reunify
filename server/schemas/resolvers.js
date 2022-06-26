@@ -6,6 +6,7 @@ const {
   Sponsor,
   Status,
   Tasks,
+  Audit,
 } = require("../models");
 const { signToken } = require("../utils/auth");
 
@@ -89,11 +90,13 @@ const resolvers = {
       const createTasks = await Tasks.create({ uac: newUac._id });
       const createStatus = await Status.create({ uac: newUac._id });
       const createRelease = await ReleaseRequest.create({ uac: newUac._id });
+      const createAudit = await Audit.create({ uac: newUac._id });
 
       newUac.sponsor = createSponsor._id;
       newUac.tasks = createTasks._id;
       newUac.release_request = createRelease._id;
       newUac.status = createStatus._id;
+      newUac.audit = createAudit._id;
       newUac.save();
 
       return (
@@ -103,6 +106,7 @@ const resolvers = {
           { path: "tasks", model: "Tasks" },
           { path: "release_request", model: "ReleaseRequest" },
           { path: "status", model: "Status" },
+          { path: "audit", model: "Audit" },
         ]),
         createSponsor.populate({ path: "uac", model: "Uac" })
       );

@@ -29,6 +29,10 @@ const uacSchema = new Mongoose.Schema({
   category: {
     type: String,
   },
+  audit: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "Audit",
+  },
   sponsor: {
     type: Mongoose.Schema.Types.ObjectId,
     ref: "Sponsor",

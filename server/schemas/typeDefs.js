@@ -11,6 +11,11 @@ const typeDefs = gql`
     uacs: [Uac]
     team_members: [User]
   }
+  type Audit {
+    _id: ID
+    uac: Uac
+    sponsor_assessment: String
+  }
   type Tasks {
     _id: ID
     uac: Uac
@@ -44,6 +49,7 @@ const typeDefs = gql`
     tasks: Tasks
     status: Status
     release_request: ReleaseRequest
+    audit: Audit
   }
 
   type Auth {
