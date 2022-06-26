@@ -58,17 +58,18 @@ const resolvers = {
         a_number,
         casemanager,
       });
-      const updatedCm = await User.findById(casemanager);
-      const assignCm = await updatedCm.uacs.push(newUac._id);
-      console.log(updatedCm.uacs);
-
-      return newUac.populate({ path: "casemanager", model: "User" }), updatedCm;
+      const assignedCm = await User.findById(casemanager);
+      assignedCm.uacs.push(newUac);
+      assignedCm.save();
+      return (
+        newUac.populate({ path: "casemanager", model: "User" }), assignedCm
+      );
     },
     assignCM: async (parent, { userId, uacId }) => {
       const assignedCM = await User.findByIdAndUpdate(userId, {
         uacs: uacId,
       });
-      return assignedCM;
+      return ` i don't know what this does ${assignedCM};`;
     },
     removeUser: async (parent, { userId }) => {
       return User.findByIdAndDelete(userId);
