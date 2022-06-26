@@ -11,12 +11,39 @@ const typeDefs = gql`
     uacs: [Uac]
     team_members: [User]
   }
+  type Tasks {
+    _id: ID
+    uac: Uac
+    frp_received: String
+  }
+
+  type Status {
+    _id: ID
+    uac: Uac
+    remanded: String
+  }
+
+  type ReleaseRequest {
+    _id: ID
+    uac: Uac
+    straight_release: Boolean
+  }
+
+  type Sponsor {
+    _id: ID
+    name: String
+    gender: String
+  }
 
   type Uac {
     _id: ID
     uacname: String
     a_number: Int
     casemanager: User
+    sponsor: Sponsor
+    tasks: Tasks
+    status: Status
+    release_request: ReleaseRequest
   }
 
   type Auth {

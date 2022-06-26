@@ -1,5 +1,12 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User, Uac } = require("../models");
+const {
+  User,
+  Uac,
+  ReleaseRequest,
+  Sponsor,
+  Status,
+  Tasks,
+} = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
@@ -21,14 +28,22 @@ const resolvers = {
       return await User.findById(userId);
     },
     uacs: async () => {
-      return await Uac.find().populate({ path: "casemanager", model: "User" });
+      const uac = await Uac.find().populate([
+        { path: "casemanager", model: "User" },
+        { path: "sponsor", model: "Sponsor" },
+      ]);
+      console.log(uac);
+      return uac;
     },
     uac: async (parent, { uacId }) => {
-      console.log(uacId);
-      const uac = await Uac.findById(uacId).populate({
-        path: "casemanager",
-        model: "User",
-      });
+      const uac = await Uac.findById(uacId).populate([
+        {
+          path: "casemanager",
+          model: "User",
+        },
+        { path: "sponsor", model: "Sponsor" },
+      ]);
+      console.log(`this is the uac: ${uac}`);
       return uac;
     },
   },
@@ -69,9 +84,27 @@ const resolvers = {
       const assignedCm = await User.findById(casemanager);
       assignedCm.uacs.push(newUac);
       assignedCm.save();
-      console.log(assignedCm, newUac);
+
+      const createSponsor = await Sponsor.create({ uac: newUac._id });
+      const createTasks = await Tasks.create({ uac: newUac._id });
+      const createStatus = await Status.create({ uac: newUac._id });
+      const createRelease = await ReleaseRequest.create({ uac: newUac._id });
+
+      newUac.sponsor = createSponsor._id;
+      newUac.tasks = createTasks._id;
+      newUac.release_request = createRelease._id;
+      newUac.status = createStatus._id;
+      newUac.save();
+
       return (
-        newUac.populate({ path: "casemanager", model: "User" }), assignedCm
+        newUac.populate([
+          { path: "casemanager", model: "User" },
+          { path: "sponsor:", model: "Sponsor" },
+          { path: "tasks", model: "Tasks" },
+          { path: "release_request", model: "ReleaseRequest" },
+          { path: "status", model: "Status" },
+        ]),
+        createSponsor.populate({ path: "uac", model: "Uac" })
       );
     },
     assignCM: async (parent, { userId, uacId }) => {

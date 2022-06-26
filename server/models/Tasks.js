@@ -1,6 +1,10 @@
 const Mongoose = require("mongoose");
 
 const taskSchema = new Mongoose.Schema({
+  uac: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "Uac",
+  },
   sponsor_assessment_completed: {
     type: Date,
   },

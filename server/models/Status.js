@@ -1,6 +1,10 @@
 const Mongoose = require("mongoose");
 
 const statusSchema = new Mongoose.Schema({
+  uac: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "Uac",
+  },
   remanded: {
     type: Date,
   },

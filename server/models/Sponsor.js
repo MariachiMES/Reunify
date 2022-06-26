@@ -1,6 +1,10 @@
 const Mongoose = require("mongoose");
 
 const sponsorSchema = new Mongoose.Schema({
+  uac: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "Uac",
+  },
   name: {
     type: String,
   },

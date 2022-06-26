@@ -1,6 +1,10 @@
 const Mongoose = require("mongoose");
 
 const releaseRequestSchema = new Mongoose.Schema({
+  uac: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "Uac",
+  },
   sir: {
     type: Number,
   },
