@@ -33,6 +33,11 @@ const userSchema = new Mongoose.Schema({
   team_lead: {
     type: Mongoose.Schema.Types.ObjectId,
     ref: "User",
+    validate: {
+      validator: function (v) {
+        return is_team_lead.test(v);
+      },
+    },
   },
   team_members: [
     {

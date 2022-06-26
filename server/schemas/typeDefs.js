@@ -9,6 +9,7 @@ const typeDefs = gql`
     is_team_lead: Boolean
     team_lead: User
     uacs: [Uac]
+    team_members: [User]
   }
 
   type Uac {
@@ -36,8 +37,8 @@ const typeDefs = gql`
     assignCM(userId: String!, uacId: String!): User
     assignTeamLead(cmUserId: ID!, teamLeadId: ID!): User
     login(email: String!, password: String!): Auth
-    removeUser(_id: ID!): User
-    removeUac(_id: ID!): Uac
+    removeUser(userId: ID!): User
+    removeUac(uacId: ID!): Uac
     updateRole(cmId: ID!, is_team_lead: Boolean!): User
   }
 `;

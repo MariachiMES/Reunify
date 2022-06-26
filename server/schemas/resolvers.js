@@ -5,25 +5,16 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     users: async () => {
-      const allUsers = await User.find().populate([
-        {
-          path: "uacs",
-          model: "Uac",
-        },
-        { path: "team_lead", model: "User" },
-      ]);
+      const allUsers = await User.find().populate({
+        path: "uacs",
+        model: "Uac",
+      });
       console.log(allUsers);
       return allUsers;
     },
 
     user: async (parent, { userId }) => {
-      return await User.findById(userId).populate([
-        {
-          path: "uacs",
-          model: "Uac",
-        },
-        { path: "team_lead", model: "User" },
-      ]);
+      return await User.findById(userId);
     },
     uacs: async () => {
       return await Uac.find().populate({ path: "casemanager", model: "User" });
@@ -49,7 +40,9 @@ const resolvers = {
       return token, newUser;
     },
     assignTeamLead: async (parent, { cmUserId, teamLeadId }) => {
-      return await User.findByIdAndUpdate(cmUserId, { team_lead: teamLeadId });
+      return await User.findByIdAndUpdate(cmUserId, {
+        team_lead: teamLeadId,
+      }).populate({ path: "team_lead", model: "User" });
     },
 
     updateRole: async (parent, { is_team_lead, cmId }) => {
@@ -65,7 +58,11 @@ const resolvers = {
         a_number,
         casemanager,
       });
-      return newUac.populate({ path: "casemanager", model: "User" });
+      const updatedCm = await User.findById(casemanager);
+      const assignCm = await updatedCm.uacs.push(newUac._id);
+      console.log(updatedCm.uacs);
+
+      return newUac.populate({ path: "casemanager", model: "User" }), updatedCm;
     },
     assignCM: async (parent, { userId, uacId }) => {
       const assignedCM = await User.findByIdAndUpdate(userId, {
@@ -74,10 +71,10 @@ const resolvers = {
       return assignedCM;
     },
     removeUser: async (parent, { userId }) => {
-      return User.findOneAndDelete(args, { _id: userId });
+      return User.findByIdAndDelete(userId);
     },
     removeUac: async (parent, { uacId }) => {
-      return Uac.findOneAndDelete(args, { _id: uacId });
+      return Uac.findByIdAndDelete(uacId);
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
