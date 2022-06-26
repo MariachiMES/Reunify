@@ -5,10 +5,14 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     users: async () => {
-      const allUsers = await User.find().populate({
-        path: "uacs",
-        model: "Uac",
-      });
+      const allUsers = await User.find().populate([
+        {
+          path: "uacs",
+          model: "Uac",
+        },
+        { path: "team_lead", model: "User" },
+        { path: "team_members", model: "User" },
+      ]);
       console.log(allUsers);
       return allUsers;
     },
@@ -40,9 +44,13 @@ const resolvers = {
       return token, newUser;
     },
     assignTeamLead: async (parent, { cmUserId, teamLeadId }) => {
-      return await User.findByIdAndUpdate(cmUserId, {
+      const teamMember = await User.findByIdAndUpdate(cmUserId, {
         team_lead: teamLeadId,
       }).populate({ path: "team_lead", model: "User" });
+      const teamLead = await User.findById(teamLeadId);
+      teamLead.team_members.push(cmUserId);
+      teamLead.save();
+      return teamMember, teamLead;
     },
 
     updateRole: async (parent, { is_team_lead, cmId }) => {
@@ -61,6 +69,7 @@ const resolvers = {
       const assignedCm = await User.findById(casemanager);
       assignedCm.uacs.push(newUac);
       assignedCm.save();
+      console.log(assignedCm, newUac);
       return (
         newUac.populate({ path: "casemanager", model: "User" }), assignedCm
       );
