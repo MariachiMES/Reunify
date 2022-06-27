@@ -26,7 +26,10 @@ const resolvers = {
     },
 
     user: async (parent, { userId }) => {
-      return await User.findById(userId);
+      return await User.findById(userId).populate([
+        { path: "uacs", model: "Uac" },
+        { path: "team_lead", model: "User" },
+      ]);
     },
     uacs: async () => {
       const uac = await Uac.find().populate([
@@ -44,7 +47,6 @@ const resolvers = {
         },
         { path: "sponsor", model: "Sponsor" },
       ]);
-      console.log(`this is the uac: ${uac}`);
       return uac;
     },
   },
@@ -111,6 +113,48 @@ const resolvers = {
         createSponsor.populate({ path: "uac", model: "Uac" })
       );
     },
+    updateSponsor: async (
+      parent,
+      {
+        sponsorId,
+        name,
+        gender,
+        relationship,
+        phone_number,
+        address,
+        city,
+        state,
+        zip,
+        adult_caregiver_name,
+        adult_caregiver_phone,
+        category1,
+        category2A,
+        category2B,
+        category3,
+        category4,
+      }
+    ) => {
+      const sponsor = await Sponsor.findByIdAndUpdate(sponsorId, {
+        name,
+        gender,
+        relationship,
+        phone_number,
+        address,
+        city,
+        state,
+        zip,
+        adult_caregiver_name,
+        adult_caregiver_phone,
+        category1,
+        category2A,
+        category2B,
+        category3,
+        category4,
+      }).populate();
+      console.log(sponsor);
+      return sponsor;
+    },
+
     assignCM: async (parent, { userId, uacId }) => {
       const assignedCM = await User.findByIdAndUpdate(userId, {
         uacs: uacId,

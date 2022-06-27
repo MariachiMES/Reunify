@@ -26,9 +26,6 @@ const uacSchema = new Mongoose.Schema({
   gender: {
     type: String,
   },
-  category: {
-    type: String,
-  },
   audit: {
     type: Mongoose.Schema.Types.ObjectId,
     ref: "Audit",
@@ -56,5 +53,4 @@ const uacSchema = new Mongoose.Schema({
 });
 
 const Uac = Mongoose.model("Uac", uacSchema);
-
 module.exports = Uac;

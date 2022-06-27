@@ -31,12 +31,14 @@ const releaseRequestSchema = new Mongoose.Schema({
   },
   fingerprints_required: {
     type: Boolean,
+    default: false,
   },
   fingerprint_results: {
     type: String,
   },
   can_checks_required: {
     type: Boolean,
+    default: false,
   },
   can_checks_received: {
     type: Date,
@@ -46,21 +48,26 @@ const releaseRequestSchema = new Mongoose.Schema({
   },
   prior_sponsorship: {
     type: Boolean,
+    default: false,
   },
   prior_address: {
     type: Boolean,
+    default: false,
   },
   straight_release: {
     type: Boolean,
+    default: false,
   },
   post_release_services: {
     type: Boolean,
+    default: false,
   },
   home_study: {
     type: Boolean,
+    default: false,
   },
   home_study_narrative: {
-    type: Boolean,
+    type: String,
   },
   caregiver_name: {
     type: String,

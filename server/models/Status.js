@@ -23,6 +23,12 @@ const statusSchema = new Mongoose.Schema({
   audit_status_date: {
     type: Date,
   },
+  last_requested: {
+    type: Date,
+  },
+  last_seen: {
+    type: Date,
+  },
   notes: {
     type: String,
   },

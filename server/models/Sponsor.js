@@ -16,6 +16,11 @@ const sponsorSchema = new Mongoose.Schema({
   },
   phone_number: {
     type: String,
+    validate: {
+      validator: function (v) {
+        return /\d{3}-\d{3}-\d{4}/.test(v);
+      },
+    },
   },
   address: {
     type: String,
