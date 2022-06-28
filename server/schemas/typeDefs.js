@@ -11,6 +11,28 @@ const typeDefs = gql`
     uacs: [Uac]
     team_members: [User]
   }
+
+  type Uac {
+    _id: ID
+    uacname: String
+    a_number: Int
+    date_of_birth: String
+    country_of_origin: String
+    date_of_intake: String
+    gender: String
+    casemanager: User
+    sponsor: Sponsor
+    tasks: Tasks
+    status: Status
+    release_request: ReleaseRequest
+    audit: Audit
+  }
+
+  type Auth {
+    token: ID
+    user: User
+  }
+
   type Audit {
     _id: ID
     uac: Uac
@@ -96,27 +118,6 @@ const typeDefs = gql`
     category4: Boolean
   }
 
-  type Uac {
-    _id: ID
-    uacname: String
-    a_number: Int
-    date_of_birth: String
-    country_of_origin: String
-    date_of_intake: String
-    gender: String
-    casemanager: User
-    sponsor: Sponsor
-    tasks: Tasks
-    status: Status
-    release_request: ReleaseRequest
-    audit: Audit
-  }
-
-  type Auth {
-    token: ID
-    user: User
-  }
-
   type Query {
     users: [User]
     user(userId: ID!): User
@@ -134,7 +135,95 @@ const typeDefs = gql`
     removeUser(userId: ID!): User
     removeUac(uacId: ID!): Uac
     updateRole(cmId: ID!, is_team_lead: Boolean!): User
-    updateSponsor(sponsorId: ID!, name: String!, gender: String!): Uac
+    updateSponsor(
+      sponsorId: ID!
+      name: String
+      gender: String
+      relationship: String
+      phone_number: String
+      address: String
+      city: String
+      state: String
+      zip: String
+      adult_caregiver_name: String
+      adult_caregiver_phone: String
+      category1: Boolean
+      category2A: Boolean
+      category2B: Boolean
+      category3: Boolean
+      category4: Boolean
+    ): Uac
+    updateTasks(
+      tasksId: ID!
+      sponsor_assessment_completed: String
+      frp_received: String
+      ari_received: String
+      proof_of_relationship_received: String
+      letter_of_designation_received: String
+      lopc_sent: String
+      sponsor_background_checks: String
+      sponsor_id_received: String
+      sponsor_fingerprints_taken: String
+      household_member_ids_received: String
+      household_member_checks: String
+      sex_offender_checks: String
+      contacted_caregiver: String
+      prior_sponsorship_request: String
+      prior_address_request: String
+      can_check_request_date: String
+    ): Uac
+    updateStatus(
+      statusId: ID!
+      remanded: String
+      submitted: String
+      approved: String
+      discharged: String
+      audit_requested: Boolean
+      audit_status_date: String
+      last_requested: String
+      last_seen: String
+      notes: String
+    ): Uac
+    updateReleaseRequest(
+      releaseRequestId: ID!
+      sir: Int
+      sir_narrative: String
+      list_of_birth_certificates: String
+      country_narrative: String
+      criminal_self_disclosure: String
+      criminal_history: String
+      sponsor_id_type: String
+      household_id_list: String
+      fingerprints_required: Boolean
+      fingerprint_results: String
+      can_checks_required: Boolean
+      can_checks_received: String
+      can_check_results: String
+      prior_sponsorship: Boolean
+      prior_address: Boolean
+      straight_release: Boolean
+      post_release_services: Boolean
+      home_study: Boolean
+      home_study_narrative: String
+      caregiver_name: String
+      release_recommendation: String
+    ): Uac
+    updateUac(
+      uacId: ID!
+      uacname: String
+      a_number: Int
+      date_of_birth: String
+      country_of_origin: String
+      date_of_intake: String
+      gender: String
+    ): Uac
+    updateUser(
+      userId: ID!
+      username: String
+      email: String
+      password: String
+      is_team_lead: Boolean
+    ): User
   }
 `;
 

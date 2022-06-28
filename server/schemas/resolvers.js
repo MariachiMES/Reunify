@@ -77,7 +77,7 @@ const resolvers = {
       });
       return updatedTeamLead;
     },
-
+    //ADD NEW UAC, ASSIGN TO CASE MANAGER
     addUac: async (parent, { uacname, a_number, casemanager }) => {
       const newUac = await Uac.create({
         uacname,
@@ -113,6 +113,7 @@ const resolvers = {
         createSponsor.populate({ path: "uac", model: "Uac" })
       );
     },
+    //UPDATE SPONSOR INFO
     updateSponsor: async (
       parent,
       {
@@ -154,7 +155,176 @@ const resolvers = {
       console.log(sponsor);
       return sponsor;
     },
+    //UPDATE TASKS
+    updateTasks: async (
+      parent,
+      {
+        tasksId,
+        sponsor_assessment_completed,
+        frp_received,
+        ari_received,
+        proof_of_relationship_received,
+        letter_of_designation_received,
+        lopc_sent,
+        sponsor_background_checks,
+        sponsor_id_received,
+        sponsor_fingerprints_taken,
+        household_member_ids_received,
+        household_member_checks,
+        sex_offender_checks,
+        contacted_caregiver,
+        prior_sponsorship_request,
+        prior_address_request,
+        can_check_request_date,
+      }
+    ) => {
+      const updatedTasks = await Tasks.findByIdAndUpdate(tasksId, {
+        tasksId,
+        sponsor_assessment_completed,
+        frp_received,
+        ari_received,
+        proof_of_relationship_received,
+        letter_of_designation_received,
+        lopc_sent,
+        sponsor_background_checks,
+        sponsor_id_received,
+        sponsor_fingerprints_taken,
+        household_member_ids_received,
+        household_member_checks,
+        sex_offender_checks,
+        contacted_caregiver,
+        prior_sponsorship_request,
+        prior_address_request,
+        can_check_request_date,
+      }).populate();
+      console.log(updatedTasks);
+      return updatedTasks;
+    },
+    //UPDATE CASE STATUS
+    updateStatus: async (
+      parent,
+      {
+        statusId,
+        remanded,
+        submitted,
+        approved,
+        discharged,
+        audit_requested,
+        audit_status_date,
+        last_requested,
+        last_seen,
+        notes,
+      }
+    ) => {
+      const updatedStatus = await Status.findByIdAndUpdate(statusId, {
+        remanded,
+        submitted,
+        approved,
+        discharged,
+        audit_requested,
+        audit_status_date,
+        last_requested,
+        last_seen,
+        notes,
+      }).populate();
+      return updatedStatus;
+    },
 
+    //UPDATE RELEASE REQUEST
+    updateReleaseRequest: async (
+      parent,
+      {
+        releaseRequestId,
+        sir,
+        sir_narrative,
+        list_of_birth_certificates,
+        country_narrative,
+        criminal_self_disclosure,
+        criminal_history,
+        sponsor_id_type,
+        household_id_list,
+        fingerprints_required,
+        fingerprint_results,
+        can_checks_required,
+        can_checks_received,
+        can_check_results,
+        prior_sponsorship,
+        prior_address,
+        straight_release,
+        post_release_services,
+        home_study,
+        home_study_narrative,
+        caregiver_name,
+        release_recommendation,
+      }
+    ) => {
+      const updatedRR = await ReleaseRequest.findByIdAndUpdate(
+        releaseRequestId,
+        {
+          sir,
+          sir_narrative,
+          list_of_birth_certificates,
+          country_narrative,
+          criminal_self_disclosure,
+          criminal_history,
+          sponsor_id_type,
+          household_id_list,
+          fingerprints_required,
+          fingerprint_results,
+          can_checks_required,
+          can_checks_received,
+          can_check_results,
+          prior_sponsorship,
+          prior_address,
+          straight_release,
+          post_release_services,
+          home_study,
+          home_study_narrative,
+          caregiver_name,
+          release_recommendation,
+        }
+      ).populate();
+      return updatedRR;
+    },
+    //UPDATE UAC INFO
+    updateUac: async (
+      parent,
+      {
+        uacId,
+        uacname,
+        a_number,
+        date_of_birth,
+        country_of_origin,
+        date_of_intake,
+        gender,
+      }
+    ) => {
+      const updatedUac = await Uac.findByIdAndUpdate(uacId, {
+        uacname,
+        a_number,
+        date_of_birth,
+        country_of_origin,
+        date_of_intake,
+        gender,
+      }).populate();
+
+      return updatedUac;
+    },
+    //UPDATE USER INFO
+    updateUser: async (
+      parent,
+      { userId, username, email, password, is_team_lead }
+    ) => {
+      const updatedUser = await User.findByIdAndUpdate(userId, {
+        username,
+        email,
+        password,
+        is_team_lead,
+      }).populate();
+
+      return updatedUser;
+    },
+    //ASSIGN CM TO UAC?????
     assignCM: async (parent, { userId, uacId }) => {
       const assignedCM = await User.findByIdAndUpdate(userId, {
         uacs: uacId,
@@ -178,7 +348,6 @@ const resolvers = {
       if (!correctPw) {
         throw new AuthenticationError("Incorrect Email or Password");
       }
-
       const token = signToken(user);
       return { token, user };
     },
