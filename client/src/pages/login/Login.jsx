@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutations";
 
 import Auth from "../../utils/auth";
+import {Button, TextField, Box} from "@mui/material";
 
 const Login = (props) => {
   const [formState, setFormState] = useState({ email: "", password: "" });
@@ -39,7 +40,7 @@ const Login = (props) => {
   };
 
   return (
-    <main className="flex-row justify-center mb-4">
+    <Box className="flex-row justify-center mb-4" margin={10}>
       <div className="col-12 col-lg-10">
         <div className="card">
           <h4 className="card-header bg-dark text-light p-2">Login</h4>
@@ -50,31 +51,36 @@ const Login = (props) => {
                 <Link to="/">back to the homepage.</Link>
               </p>
             ) : (
-              <form onSubmit={handleFormSubmit}>
-                <input
-                  className="form-input"
-                  placeholder="Your email"
-                  name="email"
-                  type="email"
-                  value={formState.email}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-input"
-                  placeholder="******"
-                  name="password"
-                  type="password"
-                  value={formState.password}
-                  onChange={handleChange}
-                />
-                <button
-                  className="btn btn-block btn-info"
-                  style={{ cursor: "pointer" }}
-                  type="submit"
-                >
-                  Submit
-                </button>
-              </form>
+              <Box component={"form"} onSubmit={handleFormSubmit} sx={{
+                '& .MuiTextField-root': { m:1 ,width: '25ch' },
+                '& .MuiButton-root': { m:1 , width: '25ch' },
+              }}>
+                <Box>
+                  <TextField
+                      label="Email"
+                      name="email"
+                      type="email"
+                      value={formState.email}
+                      onChange={handleChange}
+                  />
+                  <TextField
+                      label="Password"
+                      name="password"
+                      type="password"
+                      value={formState.password}
+                      onChange={handleChange}
+                  />
+                </Box>
+                <Box>
+                  <Button
+                      style={{ cursor: "pointer",right: 1}}
+                      type="submit"
+                      variant={"outlined"}
+                  >
+                    Submit
+                  </Button>
+                </Box>
+              </Box>
             )}
 
             {error && (
@@ -85,7 +91,7 @@ const Login = (props) => {
           </div>
         </div>
       </div>
-    </main>
+    </Box>
   );
 };
 
